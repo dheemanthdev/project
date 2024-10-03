@@ -59,3 +59,35 @@ def login() :
         return render_template("login.html")
     
 
+@app.route("/register", methods=["GET", "post"])
+def register():
+    if request.method == "POST":
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        username = request.form.get("username")
+
+        if not username:
+            return render_template("error.html")
+
+        if password != confirmation:
+            return render_template("error.html")
+        
+        try:
+            key = db.execute("INSERT INTO users (username, password) VALUES(?, ?)", username, generate_password_hash(password))
+        except ValueError:
+            print("name already exists")
+            return render_template("error.html")
+
+
+        # Remember which user has logged in
+        session["user_id"] = key
+
+        return redirect("/")
+
+
+
+
+
+    else:
+        return render_template("register.html")
+
