@@ -1,0 +1,5 @@
+# Ignore Flask session files
+flask_session/
+
+# Ignore Python bytecode cache
+__pycache__/
